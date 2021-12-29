@@ -647,12 +647,12 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		add("South", controlPanel);
 
 		inverse = new Checkbox("Inverce");
-		inverse.setState(false);
-		panel.inverse = false;
+		inverse.setState(true);
+		panel.inverse = true;
 
 		relax = new Checkbox("Relax");
-		relax.setState(false);
-		panel.relax = false;
+		relax.setState(true);
+		panel.relax = true;
 		
 		resetButton = new Button("Reset");
 		clearButton = new Button("Clear");

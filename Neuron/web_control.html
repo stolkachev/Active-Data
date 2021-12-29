@@ -1,6 +1,11 @@
 <HTML>
     <HEAD>
         <TITLE>Neural Network Development</TITLE>
+<style> 
+	input[type=text] {
+		border: 1px solid #ccc;
+	}
+</style>
     </HEAD>
     <BODY>
         <FONT COLOR=GREEN><B>Port:&nbsp;
@@ -8,7 +13,7 @@
                 MAXLENGTH="100" VALUE="10000">
         </B></FONT> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <A href="#" onclick="javascript:New_Layer();return 0;">
-            <FONT COLOR=GREEN><B>New Layer</FONT></B></A> &nbsp;
+            <FONT COLOR=GREEN><B>New Layer</B></FONT></A> &nbsp;
         <BR>
         <BR>
         <A href="#" onclick="javascript:load_Neuron_Page1();return 0;">
@@ -83,52 +88,35 @@
             <TR>
                 <TD>
                     <FONT COLOR=GREEN><B>Port:&nbsp;
-                        <INPUT TYPE="TEXT" id="o_Port_R" SIZE="3"
+                        <INPUT TYPE="TEXT" id="o_Port_R" SIZE="6"
                         MAXLENGTH="10" VALUE="10000"/>
                     </B></FONT>
                 </TD>
                 <TD>
                     <A href="#" onclick="javascript:Reset_Model();">
-                        <B><FONT COLOR=RED>Reset Model</B>
+                        <B><FONT COLOR=RED>Reset Model</FONT></B>
                     </A>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     <A href="#" onclick="javascript:Clear_Model();">
-                        <B><FONT COLOR=RED>Clean Model</B>
+                        <B><FONT COLOR=RED>Clean Model</FONT></B>
                     </A>
                 </TD>
                 <TD>
                     <A href="#" onclick="javascript:Save_Model();">
-                        <B><FONT COLOR=RED>Save Model</B>
+                        <B><FONT COLOR=RED>Save Model</FONT></B>
                     </A>
                 </TD>
             </TR>
         </TABLE>
         
         <HR SIZE=1>
-        <TABLE BORDER=0 WIDTH="100%">
-            <TR>
-                <TD ALIGN=RIGHT>
-                    <A href="#" onclick="javascript:Previous_Example();">
-                        <B>Previous demo</B>
-                    </A>
-                </TD>
-                <TD ALIGN=RIGHT>
-                    <A href="#" onclick="javascript:Next_Example();">
-                        <B>Next demo</B>
-                    </A>
-                </TD>
-            </TR>
-        </TABLE>
+
         <iframe id="Background" style="visibility:hidden;display:none" ></iframe>
         <SCRIPT>
             Host = "http://localhost:";
             N = 0;
             ID = 0;
-            function Next_Example()
-            {
-                location.href = "../Example_2/loader2.htm";
-            }
         
         function big_Bang_Continue()
         {

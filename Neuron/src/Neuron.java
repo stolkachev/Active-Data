@@ -3,35 +3,32 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.text.*;
 import java.math.*;
 
 // NEURON - main NNOD API
-//Copyright (C) 2020  Sergey Tolkachev
-//US PAT #9305050B2
+// Copyright (C) 2018  Sergey Tolkachev
+// US PAT #9305050B2
 
 public class Neuron {
-	static int screen_H = 950;
-	static int screen_W = 950;
 	int nnerves = 0;
 	int nnodes = 0;
 	int index;
 	int port;
+	static int screen_H = 650;
+	static int screen_W = 750;
 	Node nodes[] = new Node[10000];
 	Nerve nerves[] = new Nerve[100000];
 	int length = 100;
 	static int basic_Port = 10000;
 	float W = 0;
-	double D = 5000.0;
-	float T = (float) 1.0;
-	long delay_S = 5000;
-	
-	static float arg_W = (float) 1.0;
-	static double arg_D = 5000.0;
-	static float arg_T = (float) 1.0;
-	static double inverse_arg_D = 2000.0;
-	static float inverse_arg_T = -1;
-
-	static long arg_delay_S = 5000;
+	double D = 0;
+	float T = 0;
+	long delay_S = 0;
+	static float arg_W = 0;
+	static double arg_D = 0;
+	static float arg_T = 0;
+	static long arg_delay_S = 0;
 	static int current_Port = 0;
 
 	public float get_arg_W() {
@@ -52,27 +49,7 @@ public class Neuron {
 	public void set_current_Port(int port) {
 		current_Port = port;
 	}
-	
-//////////////////////////////////////////////////////////////////////	
-	public static void main(String[] args) {
-		Neuron neuron = new Neuron(current_Port);
-		try {
-			arg_W = Integer.parseInt(args[0]);
-		} catch (Exception x) {}
-		try {
-			arg_D = Integer.parseInt(args[1]);
-		} catch (Exception x) {}
-		try {
-			arg_T = Integer.parseInt(args[2]);
-		} catch (Exception x) {}
-		try {
-			arg_delay_S = Integer.parseInt(args[3]);
-		} catch (Exception x) {}
-		neuron.W = arg_W;
-		neuron.D = arg_D;
-		neuron.T = arg_T;
-		neuron.delay_S = arg_delay_S;
-	}
+
 //////////////////////////////////////////////////////////////////////
 	public Neuron(int i) {
 		index = i;
@@ -81,27 +58,48 @@ public class Neuron {
 		n.id = 0;
 		n.name = "" + 0;
 		nodes[nnodes] = n;
-
-		Neuro_Layer screen = new Neuro_Layer(this);
-		if (screen.inverse.getState())
-		{
-// Discharge in 1 second.	
-// Fire when discharged (reverse excitement).
-			n.T = inverse_arg_T;
-			n.D = inverse_arg_D;
-		}else
-		{
-			n.T = arg_T;
-			n.D = arg_D;
-		}
+		n.T = arg_T;
+		n.D = arg_D;
 		nnodes++;
-		
-		screen.setSize(screen_H, screen_W);
+		Neuro_Layer screen = new Neuro_Layer(this);
+		screen.setSize(screen_W, screen_H);
 		int offset = index * 90 + 10;
-		if (offset < 0 || offset > 200) offset = 90;
+		if (offset < 0 || offset > 200)
+			offset = 90;
 		screen.setLocation(offset, offset);
 		screen.setVisible(true);
 		screen.start();
+	}
+//////////////////////////////////////////////////////////////////////	
+	public static void main(String[] args) {
+		try {
+			arg_W = Integer.parseInt(args[0]);
+		} catch (Exception x) {
+			arg_W = 1;
+		}
+		try {
+			arg_D = Integer.parseInt(args[1]);
+		} catch (Exception x) {
+			arg_D = 0;
+		}
+		try {
+			arg_T = Integer.parseInt(args[2]);
+			arg_T = -1;
+		} catch (Exception x) {
+			arg_T = -1;
+		}
+		try {
+			arg_delay_S = Integer.parseInt(args[3]);
+		} catch (Exception x) {
+			arg_delay_S = 5000;
+		}
+		
+		Neuron neuron = new Neuron(current_Port);
+
+		neuron.W = arg_W;
+		neuron.D = arg_D;
+		neuron.T = arg_T;
+		neuron.delay_S = arg_delay_S;
 	}
 //////////////////////////////////////////////////////////////////////
 	public static class Node {
@@ -111,8 +109,8 @@ public class Neuron {
 		String name = null;
 		double E = 0;
 		double curent_E = 0;
-		double D = arg_D;
-		double T = arg_T;		
+		double D = 0;
+		double T = -1;
 		Date S = null;
 		double O = 0;
 		String O_URL = "";
@@ -136,11 +134,11 @@ public class Neuron {
 		int w = 60;
 		int h = 40;
 		
-	
+//////////////////////////////////////////////////////////////////////		
 		public Node(Neuron n) {
 			this.neuron = n;
 		}
-
+//////////////////////////////////////////////////////////////////////
 		public void discharge_Me() {
 			java.util.Date now = new java.util.Date();
 			long S_DELAY = 0;
@@ -228,12 +226,7 @@ public class Neuron {
 				}
 				return;
 			}
-			try {
-				period = now.getTime() - E_When.getTime();
-			} catch (Exception x) {
-				period = -1;
-			}
-			
+			period = now.getTime() - E_When.getTime();
 			if (D != -1) {
 				if (period > D) {
 					charged = false;
@@ -242,11 +235,8 @@ public class Neuron {
 					G = 255;
 					B = 255;
 				} else {
-					try {
-						curent_E = E * (D - ((now.getTime() - E_When.getTime()))) / D;
-					} catch (Exception x) {
-						curent_E = 0;
-					}
+					curent_E = E * (D - ((now.getTime() - E_When.getTime())))
+							/ D;
 					charged = true;
 				}
 			}
@@ -265,7 +255,7 @@ public class Neuron {
 					B = 255;
 				}
 			} else {
-				if (curent_E > 0 && this.O == 0) {
+				if (curent_E > 0) {
 					G = 255 - (int) (curent_E * 255);
 				} else {
 					G = 255;
@@ -286,94 +276,81 @@ public class Neuron {
 				}
 			} else {
 				if (curent_E >= T) {
-//					System.out.println("WILL FIRE FROM DISCHARGE WHEN E > T: " + this.id + " : " + curent_E + " : " + T);
 					this.fire_Me();
 				}
 			}
 
-//			if (this.O > 0) {
-//
-//				System.out.println("WILL FIRE FROM DISCHARGE WHEN O: " + this.id + " : " + curent_E + " : " + T);
-//				this.fire_Me();
-//			}
+			if (this.O > 0) {
+				this.fire_Me();
+			}
 		}
-		
 		public void excite_Me(double e_d) {
 			if (e_d > 1)
 				e_d = 1;
 			if (e_d < -1)
 				e_d = -1;
 			java.util.Date now = new java.util.Date();
-			this.E_When = now;
+			E_When = now;
 			if (e_d == 1 || e_d == -1 || e_d == 0) {
-				this.curent_E = e_d;
+				curent_E = e_d;
 			} else {
-				this.curent_E = this.curent_E + e_d;
+				curent_E = curent_E + e_d;
 			}
-			if (this.curent_E > 1.0)
-				this.curent_E = 1;
-			if (this.curent_E < -1.0)
-				this.curent_E = -1;
-			this.E = this.curent_E;
-			this.S = null;
-			this.charged = true;
-			if (this.curent_E <= 0) O = 0;
-			if (this.T < 0) 
-			{
-				if (e_d == -1.0) 
-				{
-					this.charged = false;
-					this.curent_E = 0;
-				}else
-				{
-					if (this.curent_E == 0) 
-					{
-						this.curent_E = 1;
-						this.fire_Me();
-					}
+			if (curent_E > 1.0)
+				curent_E = 1;
+			if (curent_E < -1.0)
+				curent_E = -1;
+			E = curent_E;
+			S = null;
+			charged = true;
+			if (curent_E <= 0)
+				O = 0;
+			if (T < 0) {
+				if (curent_E == 0) {
+					curent_E = 1;
+					this.fire_Me();
 				}
 			} else {
-				if (this.curent_E >= this.T) {
+				if (curent_E >= T) {
 					this.fire_Me();
 				}
 			}
 		}
-		
 		public void fire_Me() {
-			Neuron.Node this_node = this;
 			double token = 0;
-			this_node.O = 1;
+			this.O = 1;
 			boolean fired = false;
 			for (int i = 0; i < neuron.nnerves; i++) {
 				Neuron.Nerve e1 = neuron.nerves[i];
-				if (e1.from == this_node.id) {
-					token = this_node.O * e1.W;
+				if (e1.from == this.id) {
+					token = this.O * e1.W;
 					neuron.nodes[e1.to].excite_Me(token);
 					neuron.nodes[e1.to].S = null;
+
 					fired = true;
 				}
 			}
+			this.E = 0;
+			this.curent_E = 0;
 			if (fired) {
-				this_node.E = 0;
-				this_node.curent_E = 0;
-				this_node.charged = false;
-				this_node.O = 0;
+				charged = false;
+				this.O = 0;
 				R = 255;
 				G = 255;
 				B = 255;
 			}
-			if (!this_node.O_URL.equals("")) {
+			if (!O_URL.equals("")) {
 				String tmp = "";
-				if (this_node.O_URL.indexOf("http://") == 0) {
-					tmp = this_node.O_URL;
+				if (O_URL.indexOf("http://") == 0) {
+					tmp = O_URL;
 				} else {
-					tmp = "http://" + this_node.O_URL;
+					tmp = "http://" + O_URL;
 				}
-				if (this_node.O_URL.indexOf("=") < 0) {
+				if (O_URL.indexOf("=") < 0) {
 					tmp = tmp + "?ID=" + id;
 				}
-				this_node.charged = false;
-				this_node.O = 0;
+				charged = false;
+				this.O = 0;
 				R = 255;
 				G = 255;
 				B = 255;
@@ -388,14 +365,11 @@ public class Neuron {
 					}
 					in.close();
 				} catch (Exception e) {
-//					System.out.println(e);
+					System.out.println(e);
 				}
 //				System.out.println(input);
 			}
-//			System.out.println("FIRED: " + this_node.id + " : " + this_node.curent_E + " : " + this_node.T);
 		}
-		
-		
 		public void link_Me() {
 			for (int i = 0; i < neuron.nnodes; i++) {
 				Node n = neuron.nodes[i];
@@ -422,7 +396,7 @@ public class Neuron {
 				while ((theInput = in.readLine()) != null) {
 					String str = "";
 					String str2 = "";
-					
+
 					Vector<String> v_L_DELAY = new Vector<String>();
 					Vector<String> v_S_DELAY = new Vector<String>();
 					Vector<String> v_C_DELAY = new Vector<String>();
@@ -631,10 +605,17 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 	GraphPanel panel;
 	Panel controlPanel;
 	Checkbox relax;
-	Checkbox inverse;
-	Button clearButton;
+	Button updateButton;
 	Button resetButton;
-	Label label_Patent = new Label(" US PAT #9305050B2");
+	Scrollbar slider_Weight;
+	Scrollbar slider_TreshHold;
+	Scrollbar slider_Discharge;
+	TextField textField_Weight;
+	TextField textField_TreshHold;
+	TextField textField_Discharge;
+	Label label_W = new Label("W:");
+	Label label_D = new Label("D:");
+	Label label_T = new Label("T:");	
 //////////////////////////////////////////////////////////////////////	
 	public Neuro_Layer(Neuron n) {
 		super("Exploratorium_" + n.port);
@@ -646,62 +627,128 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		controlPanel = new Panel();
 		add("South", controlPanel);
 
-		inverse = new Checkbox("Inverce");
-		inverse.setState(true);
-		panel.inverse = true;
-
 		relax = new Checkbox("Relax");
 		relax.setState(true);
 		panel.relax = true;
-		
+
+		updateButton = new Button("Update");
 		resetButton = new Button("Reset");
-		clearButton = new Button("Clear");
+
+		slider_Weight = new Scrollbar(Scrollbar.HORIZONTAL, 101, 1, 0, 101);
+		slider_TreshHold = new Scrollbar(Scrollbar.HORIZONTAL, 101, 1, 0, 101);
+		slider_Discharge = new Scrollbar(Scrollbar.HORIZONTAL, 101, 1, 0, 101);
+
+		textField_Weight = new TextField("1.00", 5);
+		textField_TreshHold = new TextField("1.00", 5);
+		textField_Discharge = new TextField("1.00", 5);
 
 		GridBagConstraints constraints = new GridBagConstraints();
 		GridBagLayout aLayout = new GridBagLayout();
 		controlPanel.setLayout(aLayout);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 
+		constraints.gridx = 0; // Start column
 		constraints.gridy = 0; // Start row
-		constraints.gridwidth = 1; // Num. of columns wide
-		constraints.gridheight = 1; // Num. of rows high
-		constraints.weightx = 4;
-		constraints.fill = GridBagConstraints.NONE;
-		
-		constraints.gridx = 0;
-		constraints.anchor = GridBagConstraints.WEST;
-		aLayout.setConstraints(label_Patent, constraints);
-		
-		constraints.gridx = 1;
-		aLayout.setConstraints(clearButton, constraints);
 
+		constraints.gridwidth = 1; // Num. of columns wide
+		constraints.gridheight = 2; // Num. of rows high
+
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.insets = new Insets(5, 1, 5, 1);
+
+		constraints.weightx = 0;
+		constraints.gridx = 0;
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(label_W, constraints);
+
+		constraints.weightx = 2;
+		constraints.gridx = 1;
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(textField_Weight, constraints);
+
+		constraints.weightx = 20;
 		constraints.gridx = 2;
-		aLayout.setConstraints(resetButton, constraints);
-		
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		aLayout.setConstraints(slider_Weight, constraints);
+
+		constraints.weightx = 2;
 		constraints.gridx = 3;
 		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
 		aLayout.setConstraints(relax, constraints);
-		
-		constraints.gridx = 4;
+
+		constraints.insets = new Insets(1, 1, 5, 1);
+		constraints.gridy = 2;
+		constraints.gridx = 0;
 		constraints.anchor = GridBagConstraints.EAST;
-		aLayout.setConstraints(inverse, constraints);
-		
-		controlPanel.add(label_Patent);
-		controlPanel.add(inverse);
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(label_T, constraints);
+
+		constraints.gridx = 1;
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(textField_TreshHold, constraints);
+
+		constraints.gridx = 2;
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		aLayout.setConstraints(slider_TreshHold, constraints);
+
+		constraints.gridx = 3;
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(updateButton, constraints);
+
+		constraints.insets = new Insets(1, 1, 5, 1);
+		constraints.gridy = 4;
+		constraints.gridx = 0;
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(label_D, constraints);
+
+		constraints.gridx = 1;
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(textField_Discharge, constraints);
+
+		constraints.gridx = 2;
+		constraints.anchor = GridBagConstraints.WEST;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		aLayout.setConstraints(slider_Discharge, constraints);
+
+		constraints.gridx = 3;
+		constraints.anchor = GridBagConstraints.EAST;
+		constraints.fill = GridBagConstraints.NONE;
+		aLayout.setConstraints(resetButton, constraints);
+
+		controlPanel.add(label_W);
+		controlPanel.add(textField_Weight);
+		controlPanel.add(slider_Weight);
 		controlPanel.add(relax);
+		controlPanel.add(label_T);
+		controlPanel.add(textField_TreshHold);
+		controlPanel.add(slider_TreshHold);
+		controlPanel.add(updateButton);
+		controlPanel.add(label_D);
+		controlPanel.add(textField_Discharge);
+		controlPanel.add(slider_Discharge);
 		controlPanel.add(resetButton);
-		controlPanel.add(clearButton);
 
 		controlPanel.setBackground(Color.LIGHT_GRAY);
 		Color color = new Color(240, 240, 240);
 		panel.setBackground(color);
 
 		addWindowListener(this);
-		
+		updateButton.addActionListener(this);
 		resetButton.addActionListener(this);
 		relax.addItemListener(this);
-		inverse.addItemListener(this);
-		clearButton.addActionListener(this);	
+		slider_Weight.addAdjustmentListener(this);
+		slider_TreshHold.addAdjustmentListener(this);
+		slider_Discharge.addAdjustmentListener(this);
 	}
 //////////////////////////////////////////////////////////////////////
 	public class network_Protocol {
@@ -741,23 +788,13 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 			}
 			
 			if (this_Input.indexOf("CLEAR") >= 0) {
-//				neuron.Node.Init(10000);
-//				neuron.Nerve.Init();
+				//				neuron.Node.Init(10000);
+				//				neuron.Nerve.Init();
 				neuron.nnerves = 0;
 				neuron.nnodes = 0;
 
 				Neuron.Node n = new Neuron.Node(neuron);
 				n.id = 0;
-				if (panel.inverse)
-				{
-					n.D = Neuron.inverse_arg_D;
-					n.T = Neuron.inverse_arg_T;
-				}else
-				{
-					n.D = Neuron.arg_D;
-					n.T = Neuron.arg_T;
-				}
-//				System.out.println(n.id + " : " + n.D + " : " + n.T + " : " + panel.inverse);
 				n.name = "" + 0;
 				neuron.nodes[neuron.nnodes] = n;
 				neuron.nnodes++;
@@ -791,7 +828,7 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 				}
 			}
 			} catch (Exception e) {
-//				System.out.println(e + " : " + this_Input);
+				System.out.println(e + " : " + this_Input);
 			}
 			
 			int from = 0;
@@ -846,6 +883,8 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 						+ neuron.nodes[from].S;
 				return theOutput;
 			}
+			
+			
 			
 			if (this_Input.indexOf("=MW") >= 0) {
 				String tmp3 = null;
@@ -922,7 +961,10 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 				output.close();
 				in.close();
 				socket.close();
-			} catch (IOException e) { }
+
+			} catch (IOException e) {
+				//   	   	 e.printStackTrace();
+			}
 		}
 	}
 //////////////////////////////////////////////////////////////////////
@@ -945,7 +987,6 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-
 				try {
 					serverSocket.close();
 				} catch (IOException e2) {
@@ -975,9 +1016,9 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 	}
 	public void itemStateChanged(ItemEvent e) {
 		Object src = e.getSource();
-		boolean sel = e.getStateChange() == ItemEvent.SELECTED;
-		if (src == relax) panel.relax = sel;
-		if (src == inverse) panel.inverse = sel;
+		boolean on = e.getStateChange() == ItemEvent.SELECTED;
+		if (src == relax)
+			panel.relax = on;
 	}
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals("Reset")) {
@@ -992,29 +1033,78 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 				neuron.nodes[i].B = 255;
 			}
 		}
-		if (event.getActionCommand().equals("Clear")) {
-			neuron.nnerves = 0;
-			neuron.nnodes = 0;
-			Neuron.Node n = new Neuron.Node(neuron);
-			n.id = 0;
-			if (panel.inverse)
-			{
-				n.D = Neuron.inverse_arg_D;
-				n.T = Neuron.inverse_arg_T;
-			}else
-			{
-				n.D = Neuron.arg_D;
-				n.T = Neuron.arg_T;
+
+		if (event.getActionCommand().equals("Update")) {
+			NumberFormat pattern = new DecimalFormat("##0.00");
+			float f = 0;
+
+			String str = "";
+			f = slider_TreshHold.getValue();
+			f = (f / 100);
+			if (f == 0)
+				f = -1;
+			str = pattern.format(f);
+			textField_TreshHold.setText(str);
+			neuron.T = Float.valueOf(str).floatValue();
+
+			neuron.D = slider_Discharge.getValue();
+			f = slider_Discharge.getValue();
+			f = (f / 100);
+			str = pattern.format(f);
+			textField_Discharge.setText(str);
+			if (neuron.D == 100)
+				neuron.D = -1;
+			if (neuron.D == 0)
+				neuron.D = 0.1;
+			if (neuron.D != 0 && neuron.D != -1) {
+				neuron.D = neuron.D * 10000;
 			}
-			n.name = "" + 0;
-			neuron.nodes[neuron.nnodes] = n;
-			neuron.nnodes++;
+			for (int i = 0; i < neuron.nnodes; i++) {
+				if (neuron.nodes[i].S != null) {
+					neuron.nodes[i].T = neuron.T;
+					neuron.nodes[i].D = neuron.D;
+				}
+			}
 		}
-	
 		repaint();
 	}
-	public void adjustmentValueChanged(AdjustmentEvent e) 
-	{	
+	public void adjustmentValueChanged(AdjustmentEvent e) {
+		NumberFormat pattern = new DecimalFormat("##0.00");
+		float f = 0;
+		String str = "";
+
+		f = slider_Weight.getValue();
+		f = (f / 100) * 2 - 1;
+		str = pattern.format(f);
+		textField_Weight.setText(str);
+		neuron.W = Float.valueOf(str).floatValue();
+
+		f = slider_TreshHold.getValue();
+		f = (f / 100);
+		if (f == 0)
+			f = -1;
+		str = pattern.format(f);
+		textField_TreshHold.setText(str);
+		neuron.T = Float.valueOf(str).floatValue();
+
+		neuron.D = slider_Discharge.getValue();
+		f = slider_Discharge.getValue();
+		f = (f / 100);
+		str = pattern.format(f);
+		textField_Discharge.setText(str);
+		if (neuron.D == 100)
+			neuron.D = -1;
+		if (neuron.D == 0)
+			neuron.D = 0.1;
+		if (neuron.D != 0 && neuron.D != -1) {
+			neuron.D = neuron.D * 10000;
+		}
+		for (int i = 0; i < neuron.nnodes; i++) {
+			if (neuron.nodes[i].S != null) {
+				neuron.nodes[i].T = neuron.T;
+				neuron.nodes[i].D = neuron.D;
+			}
+		}
 		repaint();
 	}
 }

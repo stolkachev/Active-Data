@@ -3,8 +3,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Image;
 import java.awt.Panel;
 import java.awt.event.MouseEvent;
@@ -39,9 +37,8 @@ implements Runnable, MouseListener, MouseMotionListener
     int yValues[] = new int[3];
 
     int d_Box = 14;		
-
+    
     boolean relax = false;
-    boolean inverse = false;
     boolean pickfixed;
     boolean random;
     Neuron neuron = null;
@@ -167,9 +164,6 @@ implements Runnable, MouseListener, MouseMotionListener
     	g.setColor(Color.LIGHT_GRAY);
     	g.fillRect(x - w/2, y - h/2, d_Box, d_Box);
     	g.setColor(Color.black);
-    	
-    	Graphics2D g2 = (Graphics2D)g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     	g.drawString("E", x - w/2 + 4, y - h/2 + 12);
     	
     	g.setColor(Color.LIGHT_GRAY);
@@ -338,8 +332,6 @@ implements Runnable, MouseListener, MouseMotionListener
     		String lbl = pattern.format(e.W); 
     		offgraphics.setFont(font1);
     		
-            Graphics2D g2 = (Graphics2D)offgraphics;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
     		offgraphics.drawString(lbl, x1 + (x2-x1)/3, y1 + (y2-y1)/3);
 
     	}

@@ -1,119 +1,81 @@
-<HTML>
-    <HEAD>
-        <TITLE>Neural Network Development</TITLE>
+<html>
+    <head>
+        <title>Neural Network Development</title>
 <style> 
 	input[type=text] {
 		border: 1px solid #ccc;
 	}
 </style>
-    </HEAD>
-    <BODY>
-        <FONT COLOR=GREEN><B>Port:&nbsp;
-            <INPUT TYPE="TEXT" id="o_Port" SIZE="10"
-                MAXLENGTH="100" VALUE="10000">
-        </B></FONT> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <A href="#" onclick="javascript:New_Layer();return 0;">
-            <FONT COLOR=GREEN><B>New Layer</B></FONT></A> &nbsp;
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:load_Neuron_Page1();return 0;">
-            Clone neuron</A> &nbsp;
-        <INPUT TYPE="TEXT" id="o_Clone_ID" SIZE="3"
-        MAXLENGTH="10" VALUE="0"/>
+    </head>
+    <body>
+        <font COLOR=GREEN><b>Port:&nbsp;
+            <input TYPE="TEXT" id="o_Port" SIZE="10" MAXLENGTH="100" VALUE="10000">
+        </b></font> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <a href="#" onclick="javascript:New_Layer();return 0;"> <font COLOR=GREEN><b>New Layer</b></font></a> &nbsp;
+        <br>
+        <br>
+        <a href="#" onclick="javascript:load_Neuron_Page1();return 0;"> Clone neuron</a> &nbsp;
+        <input TYPE="TEXT" id="o_Clone_ID" SIZE="3" MAXLENGTH="10" VALUE="0"/>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <INPUT TYPE="TEXT" id="o_Times" SIZE="3"
-        MAXLENGTH="10" VALUE="1"/>
-        <FONT color="#006699">&nbsp;&nbsp;times </FONT>
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:load_Neuron_Page(o_Select_ID.value, 's');return 0;">
-            Select neuron</A> &nbsp;
-        <INPUT TYPE="TEXT" id="o_Select_ID" SIZE="3"
-        MAXLENGTH="10" VALUE="0"/>
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:load_Neuron_Page(o_Excite_ID.value, 'e');return 0;">
-            Excite neuron</A> &nbsp;
-        <INPUT TYPE="TEXT" id="o_Excite_ID" SIZE="3"
-        MAXLENGTH="10" VALUE="0"/>
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:mod_Nerve(o_ID1.value, o_ID2.value, o_W1.value);return 0;">
-            Modify nerve</A> &nbsp;
-        <FONT color="#006699">ID1:&nbsp;<INPUT TYPE="TEXT" id="o_ID1" SIZE="3"
-            MAXLENGTH="10" VALUE="0"/>
-            ID2:&nbsp;<INPUT TYPE="TEXT" id="o_ID2" SIZE="3"
-            MAXLENGTH="10" VALUE="0"/>
-            W:&nbsp;<INPUT TYPE="TEXT" id="o_W1" SIZE="3"
-            MAXLENGTH="10" VALUE="0"/></FONT>
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:link_Neuron(o_Link_ID.value, 'l');return 0;">
-            Link neuron</A> &nbsp;&nbsp;&nbsp;&nbsp;
-        <INPUT TYPE="TEXT" id="o_Link_ID" SIZE="3"
-        MAXLENGTH="10" VALUE="0"/>
-        <BR>
-        <FONT color="#006699">W:</FONT>
-        <INPUT TYPE="TEXT" id="o_W" SIZE="3"
-        MAXLENGTH="10" VALUE="1.0"/>
-        <FONT color="#006699"> &nbsp;&nbsp;&nbsp;URL:</FONT>
-        <INPUT TYPE="TEXT" id="o_URL" SIZE="45"
-        STYLE='font-size: 9pt; font-family: verdana; color: BROWN'
-        MAXLENGTH="80" VALUE="localhost:8080/neural.jsp"/>
+        <input TYPE="TEXT" id="o_Times" SIZE="3" MAXLENGTH="10" VALUE="1"/>
+        <font color="#006699">&nbsp;&nbsp;times </font>
+        <br>
+        <br>
+        <a href="#" onclick="javascript:load_Neuron_Page(o_Select_ID.value, 's');return 0;"> Select neuron</a> &nbsp;
+        <input TYPE="TEXT" id="o_Select_ID" SIZE="3" MAXLENGTH="10" VALUE="0"/>
+        <br>
+        <br>
+        <a href="#" onclick="javascript:load_Neuron_Page(o_Excite_ID.value, 'e');return 0;"> Excite neuron</a> &nbsp;
+        <input TYPE="TEXT" id="o_Excite_ID" SIZE="3" MAXLENGTH="10" VALUE="0"/>
+        <br>
+        <br>
+        <a href="#" onclick="javascript:mod_Nerve(o_ID1.value, o_ID2.value, o_W1.value);return 0;">  Modify nerve</a> &nbsp;
+        <font color="#006699">ID1:&nbsp;<input TYPE="TEXT" id="o_ID1" SIZE="3" MAXLENGTH="10" VALUE="0"/>
+            ID2:&nbsp;<input TYPE="TEXT" id="o_ID2" SIZE="3" MAXLENGTH="10" VALUE="0"/>
+            W:&nbsp;<input TYPE="TEXT" id="o_W1" SIZE="3" MAXLENGTH="10" VALUE="0"/></font>
+        <br>
+        <br>
+        <a href="#" onclick="javascript:link_Neuron_2(o_Link_ID_2.value, 'l');return 0;"> Link neuron</a> &nbsp;&nbsp;&nbsp;&nbsp;
+        <input TYPE="TEXT" id="o_Link_ID_2" SIZE="3" MAXLENGTH="10" VALUE="0"/>
+        <br>
+        <font color="#006699">W:</font>
+        <input TYPE="TEXT" id="o_W_2" SIZE="3" MAXLENGTH="10" VALUE="1.0"/>
+        <font color="#006699"> &nbsp;&nbsp;&nbsp;URL:</font>
+        <input TYPE="TEXT" id="o_URL_2" SIZE="45" STYLE='font-size: 9pt; font-family: verdana; color: BROWN' MAXLENGTH="80" VALUE="localhost:10001/1=E"/>
         
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:link_Neuron_2(o_Link_ID_2.value, 'l');return 0;">
-            Link neuron</A> &nbsp;&nbsp;&nbsp;&nbsp;
-        <INPUT TYPE="TEXT" id="o_Link_ID_2" SIZE="3"
-        MAXLENGTH="10" VALUE="0"/>
-        <BR>
-        <FONT color="#006699">W:</FONT>
-        <INPUT TYPE="TEXT" id="o_W_2" SIZE="3"
-        MAXLENGTH="10" VALUE="1.0"/>
-        <FONT color="#006699"> &nbsp;&nbsp;&nbsp;URL:</FONT>
-        <INPUT TYPE="TEXT" id="o_URL_2" SIZE="45"
-        STYLE='font-size: 9pt; font-family: verdana; color: BROWN'
-        MAXLENGTH="80" VALUE="localhost:10001/1=E"/>
+        <br>
+        <br>
+        <a href="#" onclick="javascript:big_Bang();return 0;"> Start Big Bang</a> &nbsp;
+        <br>
+        <br>
         
-        <BR>
-        <BR>
-        <A href="#" onclick="javascript:big_Bang();return 0;">
-            Start Big Bang</A> &nbsp;
-        <BR>
-        <BR>
-        
-        <HR SIZE=1>
-        <TABLE BORDER=0 WIDTH="100%">
-            <TR>
-                <TD>
-                    <FONT COLOR=GREEN><B>Port:&nbsp;
-                        <INPUT TYPE="TEXT" id="o_Port_R" SIZE="6"
-                        MAXLENGTH="10" VALUE="10000"/>
-                    </B></FONT>
-                </TD>
-                <TD>
-                    <A href="#" onclick="javascript:Reset_Model();">
-                        <B><FONT COLOR=RED>Reset Model</FONT></B>
-                    </A>
+        <hr SIZE=1>
+        <table style="width:100%">
+            <tr>
+                <td>
+                    <font COLOR=GREEN><b>Port:&nbsp;
+                        <input TYPE="TEXT" id="o_Port_R" SIZE="6" MAXLENGTH="10" VALUE="10000"/>
+                    </b></font>
+                </td>
+                <td>
+                    <a href="#" onclick="javascript:Reset_Model();"> <b><font COLOR=RED>Reset Model</font></b>
+                    </a>
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;&nbsp;
-                    <A href="#" onclick="javascript:Clear_Model();">
-                        <B><FONT COLOR=RED>Clean Model</FONT></B>
-                    </A>
-                </TD>
-                <TD>
-                    <A href="#" onclick="javascript:Save_Model();">
-                        <B><FONT COLOR=RED>Save Model</FONT></B>
-                    </A>
-                </TD>
-            </TR>
-        </TABLE>
+                    <a href="#" onclick="javascript:Clear_Model();"> <b><font COLOR=RED>Clean Model</font></b>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" onclick="javascript:Save_Model();"> <b><font COLOR=RED>Save Model</font></b>
+                    </a>
+                </td>
+            </tr>
+        </table>
         
-        <HR SIZE=1>
+        <hr SIZE=1>
 
         <iframe id="Background" style="visibility:hidden;display:none" ></iframe>
-        <SCRIPT>
+        <script>
             Host = "http://localhost:";
             N = 0;
             ID = 0;
@@ -153,7 +115,6 @@
             URL = Host + o_Port.value + "/" + ID + "=" + op ;
             document.getElementById('Background').src = URL;
         }
-        
         
         function more_Connections(port)
         {
@@ -218,8 +179,6 @@
             document.getElementById('Background').src = URL;
         }
         
-        </SCRIPT>
-        
-    </BODY>
-</HTML>
-</HTML>
+        </script>
+    </body>
+</html>

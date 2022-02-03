@@ -28,8 +28,6 @@ public class Neuron {
 	static float arg_W = (float) 1.0;
 	static double arg_D = 5000.0;
 	static float arg_T = (float) 1.0;
-	static double inverse_arg_D = 2000.0;
-	static float inverse_arg_T = -1;
 
 	static long arg_delay_S = 5000;
 	static int current_Port = 0;
@@ -55,7 +53,6 @@ public class Neuron {
 	
 //////////////////////////////////////////////////////////////////////	
 	public static void main(String[] args) {
-		Neuron neuron = new Neuron(current_Port);
 		try {
 			arg_W = Integer.parseInt(args[0]);
 		} catch (Exception x) {}
@@ -68,6 +65,7 @@ public class Neuron {
 		try {
 			arg_delay_S = Integer.parseInt(args[3]);
 		} catch (Exception x) {}
+		Neuron neuron = new Neuron(current_Port);
 		neuron.W = arg_W;
 		neuron.D = arg_D;
 		neuron.T = arg_T;
@@ -83,17 +81,8 @@ public class Neuron {
 		nodes[nnodes] = n;
 
 		Neuro_Layer screen = new Neuro_Layer(this);
-		if (screen.inverse.getState())
-		{
-// Discharge in 1 second.	
-// Fire when discharged (reverse excitement).
-			n.T = inverse_arg_T;
-			n.D = inverse_arg_D;
-		}else
-		{
-			n.T = arg_T;
-			n.D = arg_D;
-		}
+		n.T = arg_T;
+		n.D = arg_D;
 		nnodes++;
 		
 		screen.setSize(screen_H, screen_W);
@@ -631,7 +620,6 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 	GraphPanel panel;
 	Panel controlPanel;
 	Checkbox relax;
-	Checkbox inverse;
 	Button clearButton;
 	Button resetButton;
 	Label label_Patent = new Label(" US PAT #9305050B2");
@@ -645,10 +633,6 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		add("Center", panel);
 		controlPanel = new Panel();
 		add("South", controlPanel);
-
-		inverse = new Checkbox("Inverce");
-		inverse.setState(true);
-		panel.inverse = true;
 
 		relax = new Checkbox("Relax");
 		relax.setState(true);
@@ -682,12 +666,7 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		constraints.anchor = GridBagConstraints.EAST;
 		aLayout.setConstraints(relax, constraints);
 		
-		constraints.gridx = 4;
-		constraints.anchor = GridBagConstraints.EAST;
-		aLayout.setConstraints(inverse, constraints);
-		
 		controlPanel.add(label_Patent);
-		controlPanel.add(inverse);
 		controlPanel.add(relax);
 		controlPanel.add(resetButton);
 		controlPanel.add(clearButton);
@@ -700,7 +679,6 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		
 		resetButton.addActionListener(this);
 		relax.addItemListener(this);
-		inverse.addItemListener(this);
 		clearButton.addActionListener(this);	
 	}
 //////////////////////////////////////////////////////////////////////
@@ -748,16 +726,10 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 
 				Neuron.Node n = new Neuron.Node(neuron);
 				n.id = 0;
-				if (panel.inverse)
-				{
-					n.D = Neuron.inverse_arg_D;
-					n.T = Neuron.inverse_arg_T;
-				}else
-				{
-					n.D = Neuron.arg_D;
-					n.T = Neuron.arg_T;
-				}
-//				System.out.println(n.id + " : " + n.D + " : " + n.T + " : " + panel.inverse);
+				n.D = Neuron.arg_D;
+				n.T = Neuron.arg_T;
+				
+//				System.out.println(n.id + " : " + n.D + " : " + n.T );
 				n.name = "" + 0;
 				neuron.nodes[neuron.nnodes] = n;
 				neuron.nnodes++;
@@ -977,7 +949,6 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		Object src = e.getSource();
 		boolean sel = e.getStateChange() == ItemEvent.SELECTED;
 		if (src == relax) panel.relax = sel;
-		if (src == inverse) panel.inverse = sel;
 	}
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand().equals("Reset")) {
@@ -997,15 +968,10 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 			neuron.nnodes = 0;
 			Neuron.Node n = new Neuron.Node(neuron);
 			n.id = 0;
-			if (panel.inverse)
-			{
-				n.D = Neuron.inverse_arg_D;
-				n.T = Neuron.inverse_arg_T;
-			}else
-			{
-				n.D = Neuron.arg_D;
-				n.T = Neuron.arg_T;
-			}
+
+			n.D = Neuron.arg_D;
+			n.T = Neuron.arg_T;
+
 			n.name = "" + 0;
 			neuron.nodes[neuron.nnodes] = n;
 			neuron.nnodes++;

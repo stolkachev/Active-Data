@@ -1,0 +1,179 @@
+<html>
+<head>
+<title>Intro in NNOD</title>
+</head>
+<body>
+<font color=GREEN><B>Port:&nbsp;
+	<input TYPE="TEXT" id="o_Port" SIZE="6" 
+			MAXLENGTH="10" VALUE="10000">
+</B></font> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<a href="#" onclick="javascript:New_Layer();return 0;">
+		<font color=GREEN><B>New Layer</font></B></a> &nbsp;
+	<br>
+	<br>
+	<a href="#" onclick="javascript:load_Neuron_Page1(document.getElementById('o_Clone_ID').value, document.getElementById('o_Times').value );return 0;">
+		Clone neuron</a> &nbsp;
+		<input TYPE="TEXT" id="o_Clone_ID" SIZE="4" 
+			MAXLENGTH="10" VALUE="0">
+		&nbsp;&nbsp;&nbsp;&nbsp; 
+		<input TYPE="TEXT" id="o_Times" SIZE="4" 
+			MAXLENGTH="10" VALUE="1">
+		<font color="#006699">&nbsp;&nbsp;times </font>
+	<br>
+	<br>
+	<a href="#" onclick="javascript:load_Neuron_Page(document.getElementById('o_Select_ID').value, 's');return 0;">
+		Select neuron</a> &nbsp;
+		<input TYPE="TEXT" id="o_Select_ID" SIZE="4" 
+			MAXLENGTH="10" VALUE="0">
+	<br>
+	<br>
+	<a href="#" onclick="javascript:load_Neuron_Page(document.getElementById('o_Excite_ID').value, 'e');return 0;">
+		Excite neuron</a> &nbsp;
+		<input TYPE="TEXT" id="o_Excite_ID" SIZE="4" 
+			MAXLENGTH="10" VALUE="0">
+	<br>
+	<br>
+	<a href="#" onclick="javascript:mod_Nerve(document.getElementById('o_ID1').value, document.getElementById('o_ID2').value, document.getElementById('o_W1').value);return 0;">
+		Modify nerve</a> &nbsp;
+		<font color="#006699">ID1:&nbsp;<input TYPE="TEXT" id="o_ID1" SIZE="4" 
+			MAXLENGTH="10" VALUE="1">
+		ID2:&nbsp;<input TYPE="TEXT" id="o_ID2" SIZE="4" 
+			MAXLENGTH="10" VALUE="2">
+		W:&nbsp;<input TYPE="TEXT" id="o_W1" SIZE="4" 
+			MAXLENGTH="10" VALUE="0.6"></font>
+	<br>
+	<br>
+	<a href="#" onclick="javascript:link_Neuron(document.getElementById('o_Link_ID').value, 'l');return 0;">
+		Link neuron</a> &nbsp;&nbsp;&nbsp;&nbsp;
+		<input TYPE="TEXT" id="o_Link_ID" SIZE="4" 
+			MAXLENGTH="10" VALUE="1">
+			&nbsp;&nbsp;-->
+		<font color="#006699"> &nbsp;&nbsp;&nbsp;URL:</font>
+		<input TYPE="TEXT" id="o_URL" SIZE="45" 
+			STYLE='font-size: 9pt; font-family: verdana; color: BROWN' 
+			MAXLENGTH="80" VALUE="localhost/NNT/neuron/neural.jsp">
+		<font color="#006699">
+	<br>
+	<br>
+	<a href="#" onclick="javascript:link_Neuron_2(document.getElementById('o_Link_ID_2').value, 'l');return 0;">
+		Link neuron</a> &nbsp;&nbsp;&nbsp;&nbsp;
+		<input TYPE="TEXT" id="o_Link_ID_2" SIZE="4" 
+			MAXLENGTH="10" VALUE="2">
+			&nbsp;&nbsp;-->
+		<font color="#006699"> &nbsp;&nbsp;&nbsp;URL:</font>
+		<input TYPE="TEXT" id="o_URL_2" SIZE="45" 
+			STYLE='font-size: 9pt; font-family: verdana; color: BROWN' 
+			MAXLENGTH="80" VALUE="localhost:10001/2=E">
+		<font color="#006699">
+<br>
+<br>	
+<hr size=1>
+<br>
+<br>						
+
+<table border=0 width="100%">
+	<TR>
+	<TD>
+		<a href="#" onclick="javascript:Reset_Model();">
+			<B><font COLOR=RED>Reset Model</B>
+		</a>
+		&nbsp;&nbsp;&nbsp;&nbsp; 
+		&nbsp;&nbsp;&nbsp;&nbsp; 
+		<a href="#" onclick="javascript:Clear_Model();">
+			<B><font COLOR=RED>Clean Model</B>
+		</a>
+	</TD>
+	</TR>
+</table>
+
+<script type='text/javascript'>
+	var Host = "http://localhost:";
+	var N = 0;
+	var ID = 0;
+
+	function loadURL(theURL)
+	{
+		xmlhttp=new XMLHttpRequest();
+		xmlhttp.onreadystatechange=function()
+		{
+			if (xmlhttp.readyState==4 && xmlhttp.status==200)
+			{
+				alert(xmlhttp.responseText);
+			}
+		}
+		xmlhttp.open("GET", theURL, true);
+		xmlhttp.send();
+	}
+
+
+	function more_Clones()
+	
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + ID + "=c" ;
+		loadURL(URL);
+		var wait = window.setTimeout('Submit_to_Data_Base();', 500);
+	}
+	function load_Neuron_Page1(I, T)
+	{
+		ID = I;
+		N = T;
+		more_Clones();
+	}
+	
+	function load_Neuron_Page(ID, op)
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + ID + "=" + op ;
+		loadURL(URL);
+	}
+	
+	
+	function more_Connections(port)
+	{
+	// http://nnod.com:10000/1=L=1=http://nnod.com:10001/1=E
+		URL = Host + current_Port + "/" + N + "=l=1.0=http://localhost:" + 
+		port + "/" + N + "=E";
+		loadURL(URL);
+		var wait = window.setTimeout('Submit_Connection(' + port + ');', 1000);
+	}
+	
+	function mod_Nerve(ID1, ID2, W)
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + ID1 + "=" + ID2 + "=" + W + "=MW";
+		loadURL(URL);
+	}
+	
+	function link_Neuron(ID, op)
+	{
+		external_URL = document.getElementById('o_URL').value;
+		URL = Host + document.getElementById('o_Port').value + "/" + ID + "=l=1=" + external_URL;
+		ploadURL(URL);
+	}
+	
+	function link_Neuron_2(ID, op)
+	{
+		external_URL = document.getElementById('o_URL_2').value;
+		URL = Host + document.getElementById('o_Port').value + "/" + ID + "=l=1=" + external_URL;
+		loadURL(URL);
+	}
+	
+	function Clear_Model()
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + "=CLEAR" ;
+		loadURL(URL);
+	}
+	
+	function Reset_Model()
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + "=RESET" ;
+		loadURL(URL);
+	}
+	
+	function New_Layer()
+	{
+		URL = Host + document.getElementById('o_Port').value + "/" + "=LAYER" ;
+		loadURL(URL);
+	}
+</script>
+
+</body>
+</html>

@@ -635,8 +635,8 @@ class Neuro_Layer extends Frame implements ActionListener, ItemListener,
 		add("South", controlPanel);
 
 		relax = new Checkbox("Relax");
-		relax.setState(true);
-		panel.relax = true;
+		relax.setState(false);
+		panel.relax = false;
 		
 		resetButton = new Button("Reset");
 		clearButton = new Button("Clear");

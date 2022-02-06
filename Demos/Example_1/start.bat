@@ -1,0 +1,1 @@
+java -cp neuron.jar neuron 1 3000 -1 10000

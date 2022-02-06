@@ -1,0 +1,187 @@
+<HTML>
+<HEAD>
+<TITLE>Neural Network Development</TITLE>
+</HEAD>
+<BODY>
+<SCRIPT>
+Host = "http://localhost:";
+N = 0;
+ID = 0;
+function Next_Example()
+{
+	location.href = "../Example_6/loader6.htm";
+}
+
+function big_Bang_Continue()
+{
+	URL = Host + o_Port.value + "/1=c" ;
+	parent.Background.location.href=URL;
+}
+function Submit_to_Data_Base()
+{
+	N--;
+	if (N > 0)
+	{
+		more_Clones();
+	}else
+	{
+		URL = "blank.htm";
+		parent.Background.location.href=URL;
+	}
+}
+function more_Clones()
+
+{
+	URL = Host + o_Port.value + "/" + ID + "=c" ;
+	parent.Background.location.href=URL;
+	var wait = window.setTimeout('Submit_to_Data_Base();', 500);
+}
+function load_Neuron_Page1(I, T)
+{
+	ID = I;
+	N = T;
+	more_Clones();
+}
+
+function load_Neuron_Page(ID, op)
+{
+	URL = Host + o_Port.value + "/" + ID + "=" + op ;
+	parent.Background.location.href=URL;
+}
+
+function link_Neuron(ID, op)
+{
+	external_URL = o_URL.value;
+	W = o_W.value;
+	URL = Host + o_Port.value + "/" + ID + "=l=" + W + "=" + external_URL;
+	parent.Background.location.href=URL;
+}
+
+function big_Bang()
+
+{
+	URL = Host + o_Port.value + "/0=c" ;
+	parent.Background.location.href=URL;
+	var wait = window.setTimeout('big_Bang_Continue();', 500);
+}
+
+function Clear_Model()
+{
+	URL = Host + o_Port_R.value + "/" + "=CLEAR" ;
+	parent.Background.location.href=URL;
+}
+
+function Reset_Model()
+{
+	URL = Host + o_Port_R.value + "/" + "=RESET" ;
+	parent.Background.location.href=URL;
+}
+
+function Save_Model()
+{
+	URL = Host + o_Port_R.value + "/" + "=SAVE" ;
+	parent.Background.location.href=URL;
+}
+
+function New_Layer()
+{
+	URL = Host + o_Port_R.value + "/" + "=LAYER" ;
+	parent.Background.location.href=URL;
+}
+
+</SCRIPT>
+	<FONT COLOR=GREEN><B>Port:&nbsp;
+	<INPUT TYPE="TEXT" Name="o_Port" SIZE="3" 
+			MAXLENGTH="10" VALUE="10000">
+</B></FONT> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<A href="#" onclick="javascript:New_Layer();return 0;">
+		<FONT COLOR=GREEN><B>New Layer</FONT></B></A> &nbsp;
+	<BR>
+	<BR>
+	<A href="#" onclick="javascript:load_Neuron_Page1(o_Clone_ID.value, o_Times.value);return 0;">
+		Clone neuron</A> &nbsp;
+		<INPUT TYPE="TEXT" Name="o_Clone_ID" SIZE="3" 
+			MAXLENGTH="10" VALUE="0">
+		&nbsp;&nbsp;&nbsp;&nbsp; 
+		<INPUT TYPE="TEXT" Name="o_Times" SIZE="3" 
+			MAXLENGTH="10" VALUE="1">
+		<FONT color="#006699">&nbsp;&nbsp;times </FONT>
+	<BR>
+	<BR>
+	<A href="#" onclick="javascript:load_Neuron_Page(o_Select_ID.value, 's');return 0;">
+		Select neuron</A> &nbsp;
+		<INPUT TYPE="TEXT" Name="o_Select_ID" SIZE="3" 
+			MAXLENGTH="10" VALUE="0">
+	<BR>
+	<BR>
+	<A href="#" onclick="javascript:load_Neuron_Page(o_Excite_ID.value, 'e');return 0;">
+		Excite neuron</A> &nbsp;
+		<INPUT TYPE="TEXT" Name="o_Excite_ID" SIZE="3" 
+			MAXLENGTH="10" VALUE="0">
+	<BR>
+	<BR>
+	<A href="#" onclick="javascript:link_Neuron(o_Link_ID.value, 'l');return 0;">
+		Link neuron</A> &nbsp;&nbsp;&nbsp;&nbsp;
+		<INPUT TYPE="TEXT" Name="o_Link_ID" SIZE="3" 
+			MAXLENGTH="10" VALUE="0">
+		<BR>
+		<FONT color="#006699">W:</FONT>
+		<INPUT TYPE="TEXT" Name="o_W" SIZE="3" 
+			MAXLENGTH="10" VALUE="1.0">
+		<FONT color="#006699"> &nbsp;&nbsp;&nbsp;URL:</FONT>
+		<INPUT TYPE="TEXT" Name="o_URL" SIZE="45" 
+			STYLE='font-size: 9pt; font-family: verdana; color: BROWN' 
+			MAXLENGTH="80" VALUE="nnod.com:8080/NNT/neuron/neural.jsp">
+		<FONT color="#006699">
+	<BR>
+	<BR>
+	<A href="#" onclick="javascript:big_Bang();return 0;">
+		Start Big Bang</A> &nbsp;
+	<BR>
+	<BR>
+	
+<HR SIZE=1>
+<TABLE BORDER=0 WIDTH="100%">
+<TR>
+<TD>
+<FONT COLOR=GREEN><B>Port:&nbsp;
+		<INPUT TYPE="TEXT" Name="o_Port_R" SIZE="3" 
+			MAXLENGTH="10" VALUE="10000">
+	</B></FONT>
+</TD>
+<TD>
+	<A href="#" onclick="javascript:Reset_Model();">
+		<B><FONT COLOR=RED>Reset Model</B>
+	</A>
+	&nbsp;&nbsp;&nbsp;&nbsp; 
+	&nbsp;&nbsp;&nbsp;&nbsp; 
+	<A href="#" onclick="javascript:Clear_Model();">
+		<B><FONT COLOR=RED>Clean Model</B>
+	</A>
+</TD>
+<TD>
+	<A href="#" onclick="javascript:Save_Model();">
+		<B><FONT COLOR=RED>Save Model</B>
+	</A>
+</TD>
+</TR>
+</TABLE>
+
+<HR SIZE=1>
+<TABLE BORDER=0 WIDTH="100%">
+<TR>
+<TD ALIGN=RIGHT>
+	<A href="#" onclick="javascript:Previous_Example();">
+		<B>Previous demo</B>
+	</A>
+</TD>
+<TD ALIGN=RIGHT>
+	<A href="#" onclick="javascript:Next_Example();">
+		<B>Next demo</B>
+	</A>
+</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>
+</HTML>
